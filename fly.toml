@@ -1,5 +1,5 @@
-# Change `app` to a name nobody on Fly has taken yet.
-app = 'spotify-leaderboard-aimnrl'
+app = 'spotify-leaderboard'
+primary_region = 'ewr'
 
 [build]
 
