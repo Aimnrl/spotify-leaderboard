@@ -1,0 +1,26 @@
+# Change `app` to a name nobody on Fly has taken yet.
+app = 'spotify-leaderboard-aimnrl'
+
+[build]
+
+[env]
+  ConnectionStrings__Db = 'Data Source=/data/leaderboard.db'
+  DataProtection__KeysPath = '/data/keys'
+  # Fly terminates HTTPS at its proxy; this makes the app see the request as HTTPS.
+  ASPNETCORE_FORWARDEDHEADERS_ENABLED = 'true'
+
+[mounts]
+  source = 'data'
+  destination = '/data'
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  # PollingService must keep running, so never sleep.
+  auto_stop_machines = 'off'
+  auto_start_machines = true
+  min_machines_running = 1
+
+[[vm]]
+  size = 'shared-cpu-1x'
+  memory = '512mb'

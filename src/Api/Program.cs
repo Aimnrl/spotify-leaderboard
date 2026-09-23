@@ -23,9 +23,11 @@ builder.Services.AddHttpClient<SpotifyClient>();
 builder.Services.AddScoped<SpotifySync>();
 builder.Services.AddHostedService<PollingService>();
 
-// Encrypts refresh tokens at rest. In production, persist the key ring somewhere durable
-// (e.g. PersistKeysToFileSystem) or every stored token becomes unreadable on redeploy.
-builder.Services.AddDataProtection();
+// Encrypts refresh tokens at rest. In production, set DataProtection:KeysPath to a durable
+// folder or every stored token becomes unreadable on redeploy.
+var dataProtection = builder.Services.AddDataProtection();
+if (builder.Configuration["DataProtection:KeysPath"] is { } keysPath)
+    dataProtection.PersistKeysToFileSystem(new DirectoryInfo(keysPath));
 builder.Services.AddSingleton(sp =>
     sp.GetRequiredService<IDataProtectionProvider>().CreateProtector("Spotify.RefreshToken"));
 
